@@ -22,9 +22,7 @@ const validoPunto = (tipoDePunto) => {
 // Recorre el array de jugadores del equipo, obtiene el apellido del jugador, lo busca en el log de partidos, si lo encuentra, valida el tipo de punto y lo suma al puntaje del equipo
 const calcularPuntosEquipo = (equipo) => {
     let valoresEquipo = {
-        puntosEquipo: 0,
-        nombreJugador: "",
-        puntosJugador: 0
+        puntosEquipo: 0
     }
 
     let tempMax = 0;
@@ -62,6 +60,9 @@ const obtenerMejorJugador = () => {
         nombreJugador: "",
         puntosJugador: 0
     }
+
+
+
     let equipos = []
 
     equipoA.forEach(jugador => {
@@ -72,7 +73,9 @@ const obtenerMejorJugador = () => {
     });
 
 
-    console.log(equipos)
+    for (let i = 0; i < log.length; i++){
+        
+    }
 }
 
 
@@ -110,7 +113,8 @@ const obtenerGanador = () => {
 
 
 
-// console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
-// console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
+console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
+console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
 obtenerMejorJugador()
+// obtenerMejorJugador()
 
