@@ -18,6 +18,8 @@ const validoPunto = (tipoDePunto) => {
     }
 }
 
+// Recibe un equipo y devuelve su puntaje, sumando los puntos de cada jugador y almacenándolos como puntos del equipo
+// Recorre el array de jugadores del equipo, obtiene el apellido del jugador, lo busca en el log de partidos, si lo encuentra, valida el tipo de punto y lo suma al puntaje del equipo
 const calcularPuntosEquipo = (equipo) => {
     let puntosEquipo = 0
     let puntosJugador = 0
@@ -34,6 +36,22 @@ const calcularPuntosEquipo = (equipo) => {
     return puntosEquipo
 }
 
+// Devuelve la distribucion de puntos por tipo de anotación
+const obtenerDistribucionPuntos = (partido) => {
+    let distribucion = {
+        TRY: 0,
+        CONVERSION: 0
+    }
+
+    for(let i = 0; i < partido.length;i++){
+        let tipoDePunto = partido[i].split(',')[1]
+        distribucion[tipoDePunto] += validoPunto(tipoDePunto)
+    }
+
+    return distribucion
+}
+
+// Imprime el resultado del partido
 const obtenerGanador = () => {
     let puntosEquipoA = calcularPuntosEquipo(equipoA);
     let puntosEquipoB = calcularPuntosEquipo(equipoB);
@@ -41,5 +59,6 @@ const obtenerGanador = () => {
 }
 
 console.log("El ganador es: " + obtenerGanador())
+console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
 
 // calcularPuntosEquipo(equipoB);
