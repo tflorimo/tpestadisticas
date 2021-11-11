@@ -9,9 +9,9 @@ const log = fs.readFileSync('partido.log', 'utf8').split('\n');
 // CONVERSION = 2 puntos
 const validoPunto = (tipoDePunto) => {
     switch (tipoDePunto) {
-        case 'TRY':
+        case "TRY":
             return 5;
-        case 'CONVERSION':
+        case "CONVERSION":
             return 2;
         default:
             return 0;
@@ -31,21 +31,16 @@ const calcularPuntosEquipo = (equipo) => {
 
     for (let i = 0; i < equipo.length; i++) {
         let apellido = equipo[i].split(' ')[1]; // separo el apellido del nombre para ubicarlo en el log del partido, separo por el espacio en "Nombre Apellido"
+        apellido = apellido.replace(/(\r\n|\n|\r)/gm, "") // elimino los saltos de linea (en la notebook del trabajo aparecian, en mi pc particular no)
         for (let j = 0; j < log.length; j++) { // recorro el log del partido
             if (log[j].includes(apellido)) { // si el apellido del jugador esta la posicion j del log, que sería cada línea
                 // acumulo los puntos del jugador en el equipo y sumo todos los puntos de ese jugador
                 let tipoDePunto = log[j].split(',')[1];
-                puntosJugador = validoPunto(tipoDePunto)
-                valoresEquipo["puntosEquipo"] += puntosJugador
-                let tempPuntosJugador = acumularPuntosJugador(apellido)
-                if (tempPuntosJugador > tempMax) {
-                    tempMax = tempPuntosJugador
-                }
+                tipoDePunto = tipoDePunto.replace(/(\r\n|\n|\r)/gm, "") // elimino los saltos de linea (en la notebook del trabajo aparecian, en mi pc particular no)
+                valoresEquipo["puntosEquipo"] += validoPunto(tipoDePunto)
             }
         }
     }
-    valoresEquipo["puntosJugador"] = tempMax
-    valoresEquipo
     return valoresEquipo
 }
 
@@ -54,11 +49,34 @@ const acumularPuntosJugador = (jugador) => {
     for (let i = 0; i < log.length; i++) {
         if (log[i].includes(jugador)) {
             let tipoDePunto = log[i].split(',')[1];
+            tipoDePunto = tipoDePunto.replace(/(\r\n|\n|\r)/gm, "") // elimino los saltos de linea (en la notebook del trabajo aparecian, en mi pc particular no)
             puntosJugador += validoPunto(tipoDePunto)
         }
     }
     return puntosJugador
 }
+
+// Obtiene el mejor jugador sin importar de que equipo sea
+const obtenerMejorJugador = () => {
+    let mejorJugador = {
+        nombreJugador: "",
+        puntosJugador: 0
+    }
+    let equipos = []
+
+    equipoA.forEach(jugador => {
+        equipos.push(jugador.replace(/(\r\n|\n|\r)/gm, ""))
+    });
+    equipoB.forEach(jugador => {
+        equipos.push(jugador.replace(/(\r\n|\n|\r)/gm, " "))
+    });
+
+
+    console.log(equipos)
+}
+
+
+
 
 // Devuelve la distribucion de puntos por tipo de anotación
 const obtenerDistribucionPuntos = (partido) => {
@@ -69,6 +87,7 @@ const obtenerDistribucionPuntos = (partido) => {
 
     for(let i = 0; i < partido.length;i++){
         let tipoDePunto = partido[i].split(',')[1]
+        tipoDePunto = tipoDePunto.replace(/(\r\n|\n|\r)/gm, "") // elimino los saltos de linea (en la notebook del trabajo aparecian, en mi pc particular no)
         distribucion[tipoDePunto] += validoPunto(tipoDePunto)
     }
 
@@ -91,7 +110,7 @@ const obtenerGanador = () => {
 
 
 
-console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
-console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
+// console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
+// console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
+obtenerMejorJugador()
 
-// calcularPuntosEquipo(equipoB);
