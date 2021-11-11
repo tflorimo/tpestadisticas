@@ -21,19 +21,43 @@ const validoPunto = (tipoDePunto) => {
 // Recibe un equipo y devuelve su puntaje, sumando los puntos de cada jugador y almacenándolos como puntos del equipo
 // Recorre el array de jugadores del equipo, obtiene el apellido del jugador, lo busca en el log de partidos, si lo encuentra, valida el tipo de punto y lo suma al puntaje del equipo
 const calcularPuntosEquipo = (equipo) => {
-    let puntosEquipo = 0
-    let puntosJugador = 0
+    let valoresEquipo = {
+        puntosEquipo: 0,
+        nombreJugador: "",
+        puntosJugador: 0
+    }
+
+    let tempMax = 0;
+
     for (let i = 0; i < equipo.length; i++) {
         let apellido = equipo[i].split(' ')[1]; // separo el apellido del nombre para ubicarlo en el log del partido, separo por el espacio en "Nombre Apellido"
         for (let j = 0; j < log.length; j++) { // recorro el log del partido
             if (log[j].includes(apellido)) { // si el apellido del jugador esta la posicion j del log, que sería cada línea
+                // acumulo los puntos del jugador en el equipo y sumo todos los puntos de ese jugador
                 let tipoDePunto = log[j].split(',')[1];
                 puntosJugador = validoPunto(tipoDePunto)
-                puntosEquipo += puntosJugador
+                valoresEquipo["puntosEquipo"] += puntosJugador
+                let tempPuntosJugador = acumularPuntosJugador(apellido)
+                if (tempPuntosJugador > tempMax) {
+                    tempMax = tempPuntosJugador
+                }
             }
         }
     }
-    return puntosEquipo
+    valoresEquipo["puntosJugador"] = tempMax
+    valoresEquipo
+    return valoresEquipo
+}
+
+const acumularPuntosJugador = (jugador) => {
+    let puntosJugador = 0;
+    for (let i = 0; i < log.length; i++) {
+        if (log[i].includes(jugador)) {
+            let tipoDePunto = log[i].split(',')[1];
+            puntosJugador += validoPunto(tipoDePunto)
+        }
+    }
+    return puntosJugador
 }
 
 // Devuelve la distribucion de puntos por tipo de anotación
@@ -53,12 +77,21 @@ const obtenerDistribucionPuntos = (partido) => {
 
 // Imprime el resultado del partido
 const obtenerGanador = () => {
-    let puntosEquipoA = calcularPuntosEquipo(equipoA);
-    let puntosEquipoB = calcularPuntosEquipo(equipoB);
-    return puntosEquipoA > puntosEquipoB ? "Equipo A" : "Equipo B";
+    let valoresEquipoA = calcularPuntosEquipo(equipoA);
+    let valoresEquipoB = calcularPuntosEquipo(equipoB);
+    
+    if (valoresEquipoA.puntosEquipo > valoresEquipoB.puntosEquipo) {
+        valoresEquipoA.nombreEquipo = "Equipo A"
+        return valoresEquipoA
+    } else {
+        valoresEquipoB.nombreEquipo = "Equipo B"
+        return valoresEquipoB
+    }
 }
 
-console.log("El ganador es: " + obtenerGanador())
+
+
+console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
 console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
 
 // calcularPuntosEquipo(equipoB);
