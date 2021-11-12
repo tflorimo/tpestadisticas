@@ -113,5 +113,4 @@ const obtenerGanador = () => {
 console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
 console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
 console.log("El jugador con mayor puntaje es: " + JSON.stringify(obtenerMejorJugador()))
-// obtenerMejorJugador()
 
