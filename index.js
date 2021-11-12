@@ -25,8 +25,6 @@ const calcularPuntosEquipo = (equipo) => {
         puntosEquipo: 0
     }
 
-    let tempMax = 0;
-
     for (let i = 0; i < equipo.length; i++) {
         let apellido = equipo[i].split(' ')[1]; // separo el apellido del nombre para ubicarlo en el log del partido, separo por el espacio en "Nombre Apellido"
         apellido = apellido.replace(/(\r\n|\n|\r)/gm, "") // elimino los saltos de linea (en la notebook del trabajo aparecian, en mi pc particular no)
@@ -61,10 +59,8 @@ const obtenerMejorJugador = () => {
         puntosJugador: 0
     }
 
-
-
     let equipos = []
-
+    // esto está hecho así para separar los jugadores que tienen el mismo apellido 
     equipoA.forEach(jugador => {
         equipos.push(jugador.replace(/(\r\n|\n|\r)/gm, ""))
     });
@@ -73,13 +69,16 @@ const obtenerMejorJugador = () => {
     });
 
 
-    for (let i = 0; i < log.length; i++){
-        
+    for (let i = 0; i < equipos.length; i++) {
+        let puntosJugador = acumularPuntosJugador(equipos[i].split(' ')[1])
+        if (puntosJugador > mejorJugador.puntosJugador) {
+            mejorJugador.nombreJugador = equipos[i]
+            mejorJugador.puntosJugador = puntosJugador
+        }
     }
+    
+    return mejorJugador
 }
-
-
-
 
 // Devuelve la distribucion de puntos por tipo de anotación
 const obtenerDistribucionPuntos = (partido) => {
@@ -111,10 +110,8 @@ const obtenerGanador = () => {
     }
 }
 
-
-
 console.log("El ganador es: " + JSON.stringify(obtenerGanador()))
 console.log("La distribución de puntos es: " + JSON.stringify(obtenerDistribucionPuntos(log)))
-obtenerMejorJugador()
+console.log("El jugador con mayor puntaje es: " + JSON.stringify(obtenerMejorJugador()))
 // obtenerMejorJugador()
 
